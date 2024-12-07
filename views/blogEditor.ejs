@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create New Blog Post</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Include TinyMCE for rich text editing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
+    <script>
+      // Initialize TinyMCE
+      tinymce.init({
+        selector: "#content",
+        plugins:
+          "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount",
+        toolbar:
+          "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
+        height: 400,
+      });
+    </script>
+  </head>
+  <body class="bg-light">
+    <div class="container py-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="card shadow-sm">
+            <div class="card-body p-4">
+              <h2 class="text-center mb-4">Create New Blog Post</h2>
+
+              <form
+                action="/api/blogs"
+                method="POST"
+                enctype="multipart/form-data"
+              >
+                <!-- Title -->
+                <div class="mb-4">
+                  <label for="title" class="form-label">Title</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    required
+                    placeholder="Enter blog title"
+                  />
+                </div>
+
+                <!-- Description -->
+                <div class="mb-4">
+                  <label for="desc" class="form-label">Description</label>
+                  <textarea
+                    class="form-control"
+                    id="desc"
+                    name="desc"
+                    rows="3"
+                    required
+                    placeholder="Enter a brief description of your blog post"
+                  ></textarea>
+                </div>
+
+                <!-- Content -->
+                <div class="mb-4">
+                  <label for="content" class="form-label">Content</label>
+                  <textarea
+                    class="form-control"
+                    id="content"
+                    name="content"
+                    required
+                  ></textarea>
+                </div>
+
+                <!-- Cover Image -->
+                <div class="mb-4">
+                  <label for="coverImage" class="form-label">Cover Image</label>
+                  <div class="input-group">
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="coverImage"
+                      name="coverImage"
+                      accept="image/*"
+                    />
+                  </div>
+                  <div class="form-text">
+                    Leave empty to use default cover image
+                  </div>
+                </div>
+
+                <!-- Preview Image -->
+                <div class="mb-4 d-none" id="imagePreview">
+                  <label class="form-label">Image Preview</label>
+                  <img
+                    src=""
+                    alt="Preview"
+                    class="img-fluid rounded"
+                    style="max-height: 300px"
+                  />
+                </div>
+
+                <!-- Submit Button -->
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    Publish Blog Post
+                  </button>
+                  <button type="button" class="btn btn-outline-secondary">
+                    Save as Draft
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Image preview functionality
+      document
+        .getElementById("coverImage")
+        .addEventListener("change", function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+              const preview = document.getElementById("imagePreview");
+              preview.classList.remove("d-none");
+              preview.querySelector("img").src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+    </script>
+  </body>
+</html>
