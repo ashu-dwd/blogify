@@ -8,19 +8,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <!-- Include TinyMCE for rich text editing -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.2/tinymce.min.js"></script>
-    <script>
-      // Initialize TinyMCE
-      tinymce.init({
-        selector: "#content",
-        plugins:
-          "anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount",
-        toolbar:
-          "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
-        height: 400,
-      });
-    </script>
+    <!-- Include CKEditor -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor5/41.1.0/ckeditor.min.js"></script>
   </head>
   <body class="bg-light">
     <div class="container py-5">
@@ -31,7 +20,7 @@
               <h2 class="text-center mb-4">Create New Blog Post</h2>
 
               <form
-                action="/api/blogs"
+                action="/blogs/upload"
                 method="POST"
                 enctype="multipart/form-data"
               >
@@ -64,12 +53,8 @@
                 <!-- Content -->
                 <div class="mb-4">
                   <label for="content" class="form-label">Content</label>
-                  <textarea
-                    class="form-control"
-                    id="content"
-                    name="content"
-                    required
-                  ></textarea>
+                  <div id="editor"></div>
+                  <input type="hidden" name="content" id="content" />
                 </div>
 
                 <!-- Cover Image -->
@@ -118,6 +103,37 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
     <script>
+      // Initialize CKEditor
+      ClassicEditor.create(document.querySelector('#editor'), {
+        toolbar: [
+          'heading',
+          '|',
+          'bold',
+          'italic',
+          'link',
+          'bulletedList',
+          'numberedList',
+          '|',
+          'imageUpload',
+          'blockQuote',
+          'insertTable',
+          'undo',
+          'redo'
+        ]
+      })
+      .then(editor => {
+        // Store editor instance
+        window.editor = editor;
+        
+        // Update hidden input before form submission
+        document.querySelector('form').addEventListener('submit', function() {
+          document.querySelector('#content').value = editor.getData();
+        });
+      })
+      .catch(error => {
+        console.error(error);
+      });
+
       // Image preview functionality
       document
         .getElementById("coverImage")

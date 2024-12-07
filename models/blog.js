@@ -22,7 +22,6 @@ const BlogSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'User', 
     required: true,
-    default:"60d5ec49f1d3a3ef0abc123"
   },
 },
 {

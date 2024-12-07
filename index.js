@@ -1,5 +1,6 @@
 const express = require("express");
 const ejs = require("ejs");
+const path = require('path');
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
 const app = express();
@@ -27,6 +28,8 @@ app.use(cookieParser())
 app.use(checkAuthCookie("token"))
 
 //middlewares for Routes
+
+app.use('/coverImages', express.static(path.join(__dirname, 'public/coverImages')));
 app.use(express.static("public"));
 app.use("/", homeRoute);
 app.use("/blogs", blogsRoute);

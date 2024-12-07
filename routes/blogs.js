@@ -1,7 +1,6 @@
 const express = require("express");
-const { handleBlogUploading } = require("../controllers/blog");
+const { handleBlogUploading, handleBlogSearchById } = require("../controllers/blog");
 const Router = express.Router();
-//const { upload } = require("../middlewares/multer");
 const multer = require("multer");
 const path = require("path");
 
@@ -18,7 +17,7 @@ const storage = multer.diskStorage({
 // Configure multer
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: 5 * 1024 * 1024 },  // Limit file size to 5 MB
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith("image/")) {
       cb(null, true);
@@ -29,6 +28,10 @@ const upload = multer({
 });
 
 Router.get("/", (req, res) => res.render("blogEditor", { user: req.user }));
-Router.post("/upload", upload.array("coverImage", 13), handleBlogUploading);
+
+// Correct the syntax for single image upload
+Router.post("/upload", upload.single("coverImage"), handleBlogUploading);
+
+Router.get('/:id', handleBlogSearchById);
 
 module.exports = Router;
