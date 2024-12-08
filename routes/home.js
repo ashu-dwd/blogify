@@ -2,7 +2,7 @@ const express = require("express");
 const Route = express.Router();
 const path = require("path");
 const Blogs = require("../models/blog");
-const { generateSummary } = require("../controllers/ai");
+const { generateSummary,generateBlogContent } = require("../controllers/ai");
 //dirName = path.join();
 
 Route.get("/", async (req, res) => {
@@ -14,5 +14,6 @@ Route.get("/", async (req, res) => {
 });
 
 Route.post("/ai", generateSummary);
+Route.post('/generate-blog', generateBlogContent)
 
 module.exports = Route;

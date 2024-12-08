@@ -24,12 +24,12 @@ Ensure that the summary is clear and concise, effectively conveying the main ide
     // Use the generateContentStream method to get a continuous response
     const result = await model.generateContentStream(prompt);
 
-    console.log("Starting content streaming...");
+    //console.log("Starting content streaming...");
 
     // Stream content to the client as it is generated
     for await (const chunk of result.stream) {
       const chunkText = chunk.text();
-      console.log("Streaming chunk:", chunkText);
+      ///console.log("Streaming chunk:", chunkText);
       res.write(chunkText); // Continuously send the content to the client
     }
 
@@ -41,6 +41,39 @@ Ensure that the summary is clear and concise, effectively conveying the main ide
   }
 };
 
+const generateBlogContent = async (req, res) => {
+  console.log(req.body);
+  try {
+    //console.log(req.body);
+    const prompt = `You are a talented blog writer known for your unique and engaging writing style, often using emojis and concise language to make complex ideas simple to understand. Now, write a blog post with the title ${req.body.title} and a description of ${req.body.description}.
+
+If no description is provided, write the blog based solely on the title while ensuring it remains relevant and engaging. Your tone should be professional but relatable to a 20-year-old audience. Use clear, vibrant language, and include real-life examples, anecdotes, or metaphors where appropriate. Use emojis where suitable to enhance readability and add personality to your writing. Make sure your content is in html language and informative, captivating, and delivers value while keeping it concise and well-structured.Remember to remove head body and html tags from the output.Dont add css. YOu can also use strong tags or other tags for better output.`;
+
+    // Set headers to indicate streaming response
+    res.setHeader("Content-Type", "text/html");
+    res.setHeader("Transfer-Encoding", "chunked");
+
+    // Use the generateContentStream method to get a continuous response
+    const result = await model.generateContentStream(prompt);
+    // console.log(prompt);
+    // console.log("Starting content streaming...");
+
+    // Stream content to the client as it is generated
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.text();
+      //.log("Streaming chunk:", chunkText);
+      res.write(chunkText); // Continuously send the content to the client
+    }
+
+    res.end(); // Finish the response once all content is streamed
+  } catch (error) {
+    console.error("Error generating Blog:", error);
+    res.status(500).write("An error occurred while streaming Blog.");
+    res.end();
+  }
+};
+
 module.exports = {
   generateSummary,
+  generateBlogContent,
 };
