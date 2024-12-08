@@ -1,5 +1,5 @@
 const Blog = require("../models/blog");
-
+const User = require("../models/user");
 const handleBlogUploading = async (req, res) => {
   try {
     const { title, desc, content } = req.body;
@@ -34,6 +34,13 @@ const handleBlogSearchById = async (req,res) => {
     const blog = await Blog.findById(blogId);
     if (!blog) {
       return res.status(404).send('Blog not found');
+    }
+    try {
+      const user = await User.findById(blog.author);
+      blog.authorName = user;  // Attach author details to the blog
+    } catch (err) {
+      console.error(`User not found for author ID: ${blog.author}`);
+      blog.authorName = null;
     }
     res.render('blog', { blog: blog });
   } catch (error) {

@@ -150,34 +150,7 @@
     </style>
   </head>
   <body class="bg-light">
-    <!-- Navigation Placeholder -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="/">Blog Platform</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav">
-            <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/blogs/new">New Post</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/blogs">My Posts</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
+    <%- include('./partials/nav') %>
     <!-- AI Float Button -->
     <button class="ai-float-btn" id="aiButton">
       <svg
@@ -319,6 +292,7 @@
         </div>
       </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
       integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
@@ -458,9 +432,6 @@
                   // Update CKEditor content dynamically
                   if (window.editor) {
                     window.editor.setData(`
-              <h2>${title}</h2>
-              <p>${description}</p>
-              <br>
               <div>${cleanedText}</div>
             `);
                   }

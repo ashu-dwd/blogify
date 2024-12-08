@@ -15,7 +15,7 @@ Incorporate Bootstrap classes for styling.
 Omit the 'html' text from the start and any template literals.
 The summary should consist of approximately one-third of the total word count of the original content.
 Highlight important points by wrapping them in a span element with a Bootstrap class that sets the text color to orange (e.g., text-warning).
-Ensure that the summary is clear and concise, effectively conveying the main ideas and key points of the article.`;
+Ensure that the summary is clear and concise, effectively conveying the main ideas and key points of the article. `;
 
     // Set headers to indicate streaming response
     res.setHeader("Content-Type", "text/html");
@@ -47,7 +47,7 @@ const generateBlogContent = async (req, res) => {
     //console.log(req.body);
     const prompt = `You are a talented blog writer known for your unique and engaging writing style, often using emojis and concise language to make complex ideas simple to understand. Now, write a blog post with the title ${req.body.title} and a description of ${req.body.description}.
 
-If no description is provided, write the blog based solely on the title while ensuring it remains relevant and engaging. Your tone should be professional but relatable to a 20-year-old audience. Use clear, vibrant language, and include real-life examples, anecdotes, or metaphors where appropriate. Use emojis where suitable to enhance readability and add personality to your writing. Make sure your content is in html language and informative, captivating, and delivers value while keeping it concise and well-structured.Remember to remove head body and html tags from the output.Dont add css. YOu can also use strong tags or other tags for better output.`;
+If no description is provided, write the blog based solely on the title while ensuring it remains relevant and engaging. Your tone should be professional but relatable to a 20-year-old audience. Use clear, vibrant language, and include real-life examples, anecdotes, or metaphors where appropriate. Use emojis where suitable to enhance readability and add personality to your writing. Make sure your content is in html language and informative, captivating, and delivers value while keeping it concise and well-structured.Remember to remove head body and html tags from the output.Dont add css. YOu can also use strong tags or other tags for better output. YOu can also use tables for data display and also graphs . even i said more focus on the graph data display. u can use chart.js library for displaying graph. `;
 
     // Set headers to indicate streaming response
     res.setHeader("Content-Type", "text/html");

@@ -35,6 +35,11 @@ app.use("/", homeRoute);
 app.use("/blogs", blogsRoute);
 app.use("/user", userRoute);
 
+//404 page
+app.get('*', (req,res)=> {
+  res.redirect('/404.html');
+})
+
 // Setting up EJS as the view engine
 app.set("view engine", "ejs");
 
