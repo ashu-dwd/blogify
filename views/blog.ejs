@@ -1,105 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Blogs</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta
+      name="description"
+      content="Blog post details page with accessible content"
+    />
+    <title>Blog Post | Blogify</title>
 
     <!-- Bootstrap CSS -->
     <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-        crossorigin="anonymous"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
     />
     <style>
+      :root {
+        --primary-color: #007bff;
+        --hover-color: #0056b3;
+        --modal-overlay: rgba(0, 0, 0, 0.5);
+        --transition-speed: 0.3s;
+      }
+
+      /* Improved focus styles for better accessibility */
+      *:focus {
+        outline: 3px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+
+      .ai-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1000;
+        padding: 15px 20px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all var(--transition-speed) ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .ai-button:hover,
+      .ai-button:focus {
+        background-color: var(--hover-color);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .ai-button:active {
+        transform: translateY(0);
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--modal-overlay);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity var(--transition-speed) ease;
+      }
+
+      .modal.show {
+        display: block;
+        opacity: 1;
+      }
+
+      .modal-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 500px;
+        transition: transform var(--transition-speed) ease;
+      }
+
+      .modal.show .modal-content {
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      .close {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        font-size: 24px;
+        cursor: pointer;
+        color: #666;
+        border: none;
+        background: none;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all var(--transition-speed) ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .close:hover {
+        background-color: #f0f0f0;
+        color: #333;
+      }
+
+      .hero-section {
+        height: 500px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        color: white;
+        display: flex;
+        align-items: flex-end;
+      }
+
+      .hero-title {
+        background: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        border-radius: 8px;
+        margin: 30px;
+        max-width: 80%;
+      }
+
+      .content {
+        font-size: 1.125rem;
+        line-height: 1.8;
+        color: #333;
+      }
+
+      .blog-footer {
+        text-align: center;
+        padding: 40px 20px;
+        margin-top: 60px;
+      }
+
+      .blog-footer a {
+        color: white;
+        text-decoration: none;
+        transition: color var(--transition-speed) ease;
+      }
+
+      .blog-footer a:hover {
+        color: var(--primary-color);
+      }
+
+      .author-card {
+        position: sticky;
+        top: 20px;
+      }
+
+      @media (max-width: 768px) {
         .hero-section {
-            height: 500px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            color: white;
+          height: 300px;
         }
 
         .hero-title {
-            position: absolute;
-            bottom: 30px;
-            left: 30px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px;
-            border-radius: 5px;
+          margin: 20px;
+          padding: 15px;
         }
 
         .content {
-            font-size: 18px;
-            line-height: 1.6;
+          font-size: 1rem;
         }
 
-        .blog-footer {
-            text-align: center;
-            padding: 20px;
+        .ai-button {
+          bottom: 15px;
+          right: 15px;
+          padding: 12px 16px;
         }
+      }
 
-        @media (max-width: 768px) {
-            .hero-section {
-                height: 300px;
-            }
-            .hero-title {
-                font-size: 20px;
-            }
+      /* Loading animation for AI responses */
+      .typing-indicator {
+        display: none;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        margin-top: 10px;
+      }
+
+      .typing-indicator span {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background-color: #90949c;
+        border-radius: 50%;
+        margin-right: 5px;
+        animation: typing 1s infinite ease-in-out;
+      }
+
+      .typing-indicator span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .typing-indicator span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes typing {
+        0%,
+        100% {
+          transform: translateY(0);
         }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
     </style>
-</head>
+  </head>
 
-<body>
-
-    <!-- Hero Section -->
-    <% if (locals.blog) { %>
-    <div class="hero-section" style="background-image: url('/coverImages/<%= locals.blog.coverImage %>');">
+  <body>
+    <%- include('./partials/nav') %> <% if (locals.blog) { %>
+    <main id="main-content">
+      <!-- Hero Section -->
+      <div
+        class="hero-section"
+        style="
+          background-image: url('/coverImages/<%= locals.blog.coverImage %>');
+        "
+        role="banner"
+        aria-label="Blog post hero image"
+      >
         <div class="hero-title">
-            <h1><%= locals.blog.title %></h1>
+          <h1 id="blog-title"><%= locals.blog.title %></h1>
         </div>
-    </div>
+      </div>
 
-    <main class="container my-5">
+      <div class="container my-5">
         <div class="row">
-            <div class="col-md-8">
-                <!-- Blog Content -->
-                <div class="content">
-                    <%- locals.blog.content %>
-                </div>
-            </div>
+          <!-- Blog Content -->
+          <article class="col-lg-8">
+            <div class="content"><%- locals.blog.content %></div>
+          </article>
 
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-header bg-dark text-white">
-                        Author Information
-                    </div>
-                    <div class="card-body">
-                        <p><strong>Author Name:</strong> <%= locals.blog.author %></p>
-                    </div>
-                </div>
+          <!-- Author Information -->
+          <aside class="col-lg-4">
+            <div class="card author-card">
+              <div class="card-header bg-dark text-white">
+                <h2 class="h5 mb-0">Author Information</h2>
+              </div>
+              <div class="card-body">
+                <p>
+                  <strong>Author:</strong>
+                  <span id="author-name"><%= locals.blog.author %></span>
+                </p>
+                <!-- Add more author details as needed -->
+              </div>
             </div>
+          </aside>
         </div>
+      </div>
     </main>
+
+    <!-- Improved AI Assistant Button -->
+    <button
+      class="ai-button"
+      id="aiButton"
+      aria-label="Open AI Assistant"
+      aria-expanded="false"
+      aria-controls="aiModal"
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 16v-4" />
+        <path d="M12 8h.01" />
+      </svg>
+      AI Assistant
+    </button>
+
+    <!-- Improved Modal -->
+    <div
+      class="modal"
+      id="aiModal"
+      role="dialog"
+      aria-labelledby="modalTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-content">
+        <header>
+          <h2 id="modalTitle" class="h4 mb-4">AI Assistant</h2>
+          <button class="close" id="closeModal" aria-label="Close AI Assistant">
+            &times;
+          </button>
+        </header>
+
+        <div class="modal-body">
+          <p>How can I help you understand this blog post better?</p>
+          <div class="typing-indicator" id="typingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Footer -->
     <footer class="bg-dark text-white blog-footer">
-        <p>© 2024 Your Blog | All Rights Reserved</p>
+      <p>
+        © <%= new Date().getFullYear() %>
+        <a href="/" aria-label="Return to Blogify homepage">Blogify</a> | All
+        Rights Reserved
+      </p>
     </footer>
     <% } %>
 
-    <!-- Bootstrap JS -->
+    <!-- Scripts -->
     <script
-        src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+      integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+      crossorigin="anonymous"
     ></script>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-        crossorigin="anonymous"
-    ></script>
-</body>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const aiButton = document.getElementById("aiButton");
+        const aiModal = document.getElementById("aiModal");
+        const closeButton = document.getElementById("closeModal"); // Renamed variable
+        const typingIndicator = document.getElementById("typingIndicator");
+
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        // Improved drag functionality
+        function dragStart(e) {
+          if (e.type === "touchstart") {
+            initialX = e.touches[0].clientX - xOffset;
+            initialY = e.touches[0].clientY - yOffset;
+          } else {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+          }
+
+          if (e.target === aiButton) {
+            isDragging = true;
+          }
+        }
+
+        function dragEnd() {
+          initialX = currentX;
+          initialY = currentY;
+          isDragging = false;
+        }
+
+        function drag(e) {
+          if (isDragging) {
+            e.preventDefault();
+
+            if (e.type === "touchmove") {
+              currentX = e.touches[0].clientX - initialX;
+              currentY = e.touches[0].clientY - initialY;
+            } else {
+              currentX = e.clientX - initialX;
+              currentY = e.clientY - initialY;
+            }
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            // Constrain to viewport
+            const buttonRect = aiButton.getBoundingClientRect();
+            const maxX = window.innerWidth - buttonRect.width;
+            const maxY = window.innerHeight - buttonRect.height;
+
+            currentX = Math.min(Math.max(0, currentX), maxX);
+            currentY = Math.min(Math.max(0, currentY), maxY);
+
+            setTranslate(currentX, currentY, aiButton);
+          }
+        }
+
+        function setTranslate(xPos, yPos, el) {
+          el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+        }
+
+        // Modal functions
+        function openModal() {
+          if (!isDragging) {
+            aiModal.classList.add("show");
+            aiButton.setAttribute("aria-expanded", "true");
+            aiModal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+
+            // Simulate AI thinking
+            typingIndicator.style.display = "block";
+            setTimeout(() => {
+              typingIndicator.style.display = "none";
+            }, 2000);
+          }
+        }
+
+        function closeModalFunction() {
+          // Renamed function
+          aiModal.classList.remove("show");
+          aiButton.setAttribute("aria-expanded", "false");
+          aiModal.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+        }
+
+        // Event listeners
+        aiButton.addEventListener("mousedown", dragStart);
+        aiButton.addEventListener("touchstart", dragStart);
+
+        document.addEventListener("mousemove", drag);
+        document.addEventListener("touchmove", drag);
+
+        document.addEventListener("mouseup", dragEnd);
+        document.addEventListener("touchend", dragEnd);
+
+        aiButton.addEventListener("click", openModal);
+        closeButton.addEventListener("click", closeModalFunction); // Updated event listener
+
+        // Keyboard navigation
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && aiModal.classList.contains("show")) {
+            closeModalFunction(); // Updated call
+          }
+        });
+
+        // Close modal when clicking outside
+        aiModal.addEventListener("click", (e) => {
+          if (e.target === aiModal) {
+            closeModalFunction(); // Updated call
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
